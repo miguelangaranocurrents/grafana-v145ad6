@@ -115,8 +115,11 @@ function fieldNameFallback(fields: Set<string>) {
       );
     };
   } else if (fields.has('Time') || fields.has('time')) {
+    const lowerNames = new Set(Array.from(fields, (name) => name.toLowerCase()));
     fallback = (field: Field, frame: DataFrame) => {
-      return frame.meta?.typeVersion == null && field.type === FieldType.time;
+      return (
+        frame.meta?.typeVersion == null && field.type === FieldType.time && lowerNames.has(field.name.toLowerCase())
+      );
     };
   }
 
